@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Professional Landing Page</title>
+  <style>
+    /* Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: "Poppins", sans-serif;
+      scroll-behavior: smooth;
+      background: url("https://images.unsplash.com/photo-1522199710521-72d69614c702?auto=format&fit=crop&w=1920&q=80")
+        no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+
+    /* Overlay sections */
+    section {
+      background: rgba(0, 0, 0, 0.65);
+      padding: 100px 20px;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    section.show { opacity: 1; transform: translateY(0); }
+    section h2 { font-size: 2.2rem; margin-bottom: 20px; color: #9dcd01; }
+    section p { max-width: 900px; margin: auto; line-height: 1.7; }
+
+    /* Navbar */
+    nav {
+      position: fixed; top: 0; left: 0; width: 100%;
+      padding: 15px 50px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: transparent;
+      transition: background 0.3s, box-shadow 0.3s;
+      z-index: 1000;
+    }
+    nav.scrolled { background: rgba(1, 122, 143, 0.85); box-shadow: 0 2px 15px rgba(0, 0, 0, 0.15); }
+    nav .logo { font-size: 1.8rem; font-weight: 700; color: #0c038f; }
+    nav ul { display: flex; list-style: none; gap: 20px; }
+    nav ul li a {
+      text-decoration: none; color: #fff;
+      font-weight: 500; padding: 8px 12px; border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+    nav ul li a:hover, nav ul li a.active { background: #9dcd01; color: #000; }
+
+    /* Hero */
+    .hero {
+      height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 20px;
+      background: rgba(0,0,0,0.6);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero h1 { font-size: 3.5rem; margin-bottom: 20px; animation: fadeInDown 1s ease; color: #fff; }
+    .hero .sub-text { font-size: 1.2rem; margin-top: 10px; color: #ddd; }
+    .hero-buttons {
+      margin-top: 25px;
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+    }
+    .btn {
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.3s ease;
+    }
+    .btn { background: #9dcd01; color: #000; }
+    .btn:hover { background: #fff; }
+    .btn-outline { border: 2px solid #9dcd01; color: #fff; background: transparent; }
+    .btn-outline:hover { background: #9dcd01; color: #000; }
+
+    /* Scroll-down arrow */
+    .scroll-down {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 2rem;
+      animation: bounce 1.5s infinite;
+      color: #9dcd01;
+      cursor: pointer;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, -10px); }
+    }
+
+    /* Services Grid */
+    .services-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      margin-top: 30px;
+    }
+    .service-box {
+      background: rgba(255,255,255,0.1);
+      padding: 30px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: transform 0.3s ease;
+    }
+    .service-box:hover { transform: translateY(-10px); }
+    .service-box h3 { margin-bottom: 10px; color: #9dcd01; }
+    .service-box p { color: #ddd; font-size: 0.95rem; }
+
+    /* Contact */
+    .contact-info {
+      max-width: 900px;
+      margin: auto;
+      text-align: left;
+      font-size: 1rem;
+      color: #ddd;
+      line-height: 1.8;
+    }
+    .contact-info strong { color: #fff; }
+
+    /* Footer */
+    footer {
+      background: rgba(0,0,0,0.9);
+      padding: 40px 20px;
+      text-align: center;
+      color: #bbb;
+    }
+    footer .footer-links {
+      margin: 15px 0;
+      display: flex; justify-content: center; gap: 20px;
+    }
+    footer .footer-links a {
+      color: #9dcd01; text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    footer .footer-links a:hover { color: #fff; }
+    footer p { margin-top: 15px; font-size: 0.9rem; }
+    footer .social-icons {
+      margin-top: 10px; display: flex; justify-content: center; gap: 15px;
+    }
+    footer .social-icons a {
+      color: #bbb; font-size: 1.3rem; transition: color 0.3s;
+    }
+    footer .social-icons a:hover { color: #9dcd01; }
+
+    /* Scroll-to-top */
+    #scrollTopBtn {
+      position: fixed; bottom: 30px; right: 30px;
+      background: #9dcd01; color: #000; border: none;
+      border-radius: 50%; width: 45px; height: 45px;
+      font-size: 1.5rem; cursor: pointer; display: none;
+      align-items: center; justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: background 0.3s ease, transform 0.3s ease;
+      z-index: 1000;
+    }
+    #scrollTopBtn:hover { background: #fff; transform: scale(1.1); }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav { padding: 15px 20px; }
+      nav ul {
+        flex-direction: column; background: rgba(0,0,0,0.9);
+        position: absolute; top: 70px; right: 20px;
+        width: 200px; display: none;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      }
+      nav ul.active { display: flex; }
+      .menu-toggle { display: block; font-size: 1.8rem; cursor: pointer; color: #fff; }
+    }
+    @media (min-width: 769px) { .menu-toggle { display: none; } }
+
+    /* Animations */
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Button hover effects */
+.btn {
+  padding: 12px 24px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.4s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}
+.btn-outline {
+  border: 2px solid #9dcd01;
+  color: #fff;
+  background: transparent;
+}
+.btn-outline:hover {
+  background: #9dcd01;
+  color: #000;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}
+
+/* Scroll-down arrow animations */
+.scroll-down {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2rem;
+  animation: bounce 1.5s infinite;
+  color: #9dcd01;
+  cursor: pointer;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+.scroll-down:hover {
+  color: #fff;
+  transform: translateX(-50%) translateY(-5px) scale(1.2);
+}
+
+/* Bounce animation */
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-10px); }
+}
+
+/* Service box hover animation */
+.service-box {
+  background: rgba(255,255,255,0.1);
+  padding: 30px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+}
+.service-box:hover {
+  transform: translateY(-10px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.35);
+  background: rgba(255,255,255,0.15);
+}
+.service-box h3 {
+  margin-bottom: 10px;
+  color: #9dcd01;
+  transition: color 0.3s ease;
+}
+.service-box:hover h3 {
+  color: #fff;
+}
+.service-box p {
+  color: #ddd;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+.service-box:hover p {
+  color: #f0f0f0;
+}
+
+
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav id="navbar">
+    <div class="logo">MyBrand</div>
+    <div class="menu-toggle">&#9776;</div>
+    <ul>
+      <li><a href="#home" class="active">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero / Home Section -->
+  <section id="home" class="hero">
+    <div>
+      <h1>Professional Landing Page</h1>
+      <p class="sub-text">We build modern, secure, and scalable digital solutions for your business.</p>
+      <div class="hero-buttons">
+        <a href="#services" class="btn">Explore Services</a>
+        <a href="#contact" class="btn btn-outline">Contact Us</a>
+      </div>
+    </div>
+    <div class="scroll-down" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'});">&#8595;</div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <h2>About Us</h2>
+    <p>
+      We are a passionate team of designers, developers, and strategists 
+      who believe in creating impactful digital experiences. Our mission 
+      is to help businesses and startups grow online by blending creativity, 
+      technology, and strategy into every project we deliver.
+    </p>
+  </section>
+
+  <!-- Services -->
+  <section id="services">
+    <h2>Our Services</h2>
+    <div class="services-container">
+      <div class="service-box"><h3>Web Development</h3><p>Responsive, high-performing websites tailored to your business goals.</p></div>
+      <div class="service-box"><h3>UI/UX Design</h3><p>Elegant, intuitive interfaces that engage and delight users.</p></div>
+      <div class="service-box"><h3>Digital Marketing</h3><p>Boost your presence with SEO, social media, and ROI-driven campaigns.</p></div>
+      
+      <div class="service-box"><h3>Mobile App Development</h3><p>Custom iOS and Android apps built to scale with your business.</p></div>
+      <div class="service-box"><h3>E-commerce Solutions</h3><p>Powerful online stores with seamless checkout and secure payments.</p></div>
+      <div class="service-box"><h3>Cloud Solutions</h3><p>Reliable cloud hosting, storage, and integration services for enterprises.</p></div>
+      <div class="service-box"><h3>Cybersecurity</h3><p>Advanced security audits, data protection, and vulnerability management.</p></div>
+      <div class="service-box"><h3>IT Consulting</h3><p>Expert guidance to align technology with your business strategies.</p></div>
+      <div class="service-box"><h3>Content Creation</h3><p>Engaging blogs, visuals, and videos tailored to your brand's audience.</p></div>
+      
+      <div class="service-box"><h3>Data Analytics</h3><p>Turn raw data into insights with advanced business intelligence solutions.</p></div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <div class="contact-info">
+      <p><strong>Email:</strong> hello@mybrand.com</p>
+      <p><strong>Phone:</strong> +91 98765 43210</p>
+      <p><strong>Address:</strong> 123 Creative Hub, Business Street, Surat, India</p>
+      <p><strong>Working Hours:</strong> Mon–Sat: 9:00 AM – 7:00 PM</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="social-icons">
+      <a href="#"><i>🌐</i></a>
+      <a href="#"><i>🐦</i></a>
+      <a href="#"><i>📘</i></a>
+      <a href="#"><i>📸</i></a>
+    </div>
+    <p>&copy; 2025 MyBrand. All rights reserved.</p>
+  </footer>
+
+  <!-- Scroll-to-top -->
+  <button id="scrollTopBtn">&#8679;</button>
+
+  <script>
+    // Navbar scroll effect
+    const navbar = document.getElementById("navbar");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 50) { navbar.classList.add("scrolled"); }
+      else { navbar.classList.remove("scrolled"); }
+    });
+
+    // Toggle menu
+    const menuToggle = document.querySelector(".menu-toggle");
+    const navLinks = document.querySelector("nav ul");
+    menuToggle.addEventListener("click", () => {
+      navLinks.classList.toggle("active");
+    });
+
+    // Scroll-spy
+    const sections = document.querySelectorAll("section");
+    const navItems = document.querySelectorAll("nav ul li a");
+    window.addEventListener("scroll", () => {
+      let current = "";
+      sections.forEach((section) => {
+        const sectionTop = section.offsetTop - 80;
+        if (pageYOffset >= sectionTop) { current = section.getAttribute("id"); }
+      });
+      navItems.forEach((item) => {
+        item.classList.remove("active");
+        if (item.getAttribute("href") === "#" + current) {
+          item.classList.add("active");
+        }
+      });
+    });
+
+    // Reveal sections
+    const revealSections = () => {
+      const triggerBottom = window.innerHeight * 0.85;
+      sections.forEach((section) => {
+        const sectionTop = section.getBoundingClientRect().top;
+        if (sectionTop < triggerBottom) {
+          section.classList.add("show");
+        }
+      });
+    };
+    window.addEventListener("scroll", revealSections);
+    window.addEventListener("load", revealSections);
+
+    // Scroll-to-top
+    const scrollTopBtn = document.getElementById("scrollTopBtn");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 200) { scrollTopBtn.style.display = "flex"; }
+      else { scrollTopBtn.style.display = "none"; }
+    });
+    scrollTopBtn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    // Parallax background
+    window.addEventListener("scroll", () => {
+      document.body.style.backgroundPositionY = -window.scrollY * 0.3 + "px";
+    });
+  </script>
+</body>
+</html>
